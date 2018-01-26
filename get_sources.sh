@@ -1,7 +1,14 @@
 #!/bin/bash
 
+filename=$(rpmspec -q --srpm --define "dist .el7" --queryformat '%{SOURCE}' SPECS/xen-ovmf.spec)
+if [[ "$filename" =~ ^edk2-([a-f0-9]+)\.tar\.gz ]]; then
+  EDK2_CSET="${BASH_REMATCH[1]}"
+else
+  echo >&2 "Failed to find git commit to use"
+  exit 1
+fi
+
 EDK2_URL=https://github.com/tianocore/edk2.git
-EDK2_CSET=bc54e50e0fe03c570014f363b547426913e92449
 EDK2_FILE=edk2-$EDK2_CSET.tar.gz
 
 echo "Checking edk2 (tianocore)..."

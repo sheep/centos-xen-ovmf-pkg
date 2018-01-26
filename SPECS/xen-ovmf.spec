@@ -1,6 +1,6 @@
 
-%define GITDATE        20160905
-%define GITCOMMIT      bc54e50e0
+%define GITDATE        20170920
+%define GITCOMMIT      947f3737a
 %define _libexecdir %{_libdir}
 
 Name:           xen-ovmf
@@ -10,9 +10,10 @@ Summary:        UEFI firmware for 64-bit virtual machines
 
 License:        BSD
 URL:            http://www.tianocore.org
-Source0:        edk2-bc54e50e0fe03c570014f363b547426913e92449.tar.gz
+Source0:        edk2-947f3737abf65fda63f3ffd97fddfa6986986868.tar.gz
 
-BuildRequires:  nasm gcc
+BuildRequires:  nasm >= 2.10
+BuildRequires:  gcc
 BuildRequires:  libuuid-devel
 BuildRequires:  /usr/bin/iasl
 
@@ -45,29 +46,23 @@ rm -rf $RPM_BUILD_ROOT
 copy_license() {
     install -D -m 644 $1 $RPM_BUILD_ROOT%{_docdir}/%{name}/Licenses/$2-License.txt
 }
-# ls -d Build/OvmfX64/RELEASE_GCC48/X64/*Pkg
-for pkg in FatPkg IntelFrameworkModulePkg MdeModulePkg MdePkg OptionRomPkg OvmfPkg PcAtChipsetPkg ShellPkg UefiCpuPkg; do
-  copy_license $pkg/License.txt $pkg
-done
+install -D -m 644 License.txt $RPM_BUILD_ROOT%{_docdir}/%{name}/Licenses/License.txt
+copy_license OvmfPkg/License.txt OvmfPkg
 
 install -D -m 644 Build/OvmfX64/RELEASE_GCC*/FV/OVMF.fd %{buildroot}/%{_libexecdir}/xen/boot/OVMF.fd
 
 
 %files
-%doc %{_docdir}/%{name}/Licenses/FatPkg-License.txt
-%doc %{_docdir}/%{name}/Licenses/IntelFrameworkModulePkg-License.txt
-%doc %{_docdir}/%{name}/Licenses/MdeModulePkg-License.txt
-%doc %{_docdir}/%{name}/Licenses/MdePkg-License.txt
-%doc %{_docdir}/%{name}/Licenses/OptionRomPkg-License.txt
+%doc %{_docdir}/%{name}/Licenses/License.txt
 %doc %{_docdir}/%{name}/Licenses/OvmfPkg-License.txt
-%doc %{_docdir}/%{name}/Licenses/ShellPkg-License.txt
-%doc %{_docdir}/%{name}/Licenses/PcAtChipsetPkg-License.txt
-%doc %{_docdir}/%{name}/Licenses/UefiCpuPkg-License.txt
 
 %{_libexecdir}/xen/boot/OVMF.fd
 
 
 %changelog
+* Thu Jan 25 2018 Anthony PERARD <anthony.perard@citrix.com> - 20170920-1.git947f3737a
+- Bump with OVMF from Xen 4.10
+
 * Wed Nov 29 2017 Anthony PERARD <anthony.perard@citrix.com> - 20160905-1.gitbc54e50e0
 - New package, based on ovmf pkg and xen pkg
 
