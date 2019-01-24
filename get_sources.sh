@@ -15,6 +15,7 @@ echo "Checking edk2 (tianocore)..."
 if [[ ! -e SOURCES/$EDK2_FILE ]] ; then
     echo "Cloning tianocore repo..."
     mkdir -p git-tmp
+    mkdir -p SOURCES
     pushd git-tmp
 
     git clone $EDK2_URL edk2.git || exit 1

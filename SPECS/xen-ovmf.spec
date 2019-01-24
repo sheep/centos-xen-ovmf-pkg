@@ -1,6 +1,6 @@
 
-%define GITDATE        20170920
-%define GITCOMMIT      947f3737a
+%define GITDATE        20180825
+%define GITCOMMIT      ef529e6ab
 %define _libexecdir %{_libdir}
 
 Name:           xen-ovmf
@@ -10,7 +10,7 @@ Summary:        UEFI firmware for 64-bit virtual machines
 
 License:        BSD
 URL:            http://www.tianocore.org
-Source0:        edk2-947f3737abf65fda63f3ffd97fddfa6986986868.tar.gz
+Source0:        edk2-ef529e6ab7c31290a33045bb1f1837447cc0eb56.tar.gz
 
 BuildRequires:  nasm >= 2.10
 BuildRequires:  gcc
@@ -60,6 +60,9 @@ install -D -m 644 Build/OvmfX64/RELEASE_GCC*/FV/OVMF.fd %{buildroot}/%{_libexecd
 
 
 %changelog
+* Thu Jan 24 2019 Anthony PERARD <anthony.perard@citrix.com> - 20180825-1.gitef529e6ab
+- Bump with OVMF from Xen 4.12
+
 * Thu Jan 25 2018 Anthony PERARD <anthony.perard@citrix.com> - 20170920-1.git947f3737a
 - Bump with OVMF from Xen 4.10
 
