@@ -1,7 +1,7 @@
 
-# edk2-stable201905
-%define GITDATE        201905
-%define GITCOMMIT      20d2e5a12
+# edk2-stable202102
+%define GITDATE        202102
+%define GITCOMMIT      ef91b07388e1
 %define _libexecdir %{_libdir}
 
 Name:           xen-ovmf
@@ -11,15 +11,25 @@ Summary:        UEFI firmware for 64-bit virtual machines
 
 License:        BSD
 URL:            http://www.tianocore.org
-Source0:        edk2-20d2e5a125e34fc8501026613a71549b2a1a3e54.tar.gz
-Source1:        openssl-c3656cc594daac8167721dde7220f0e59ae146fc.tar.gz
+Source0:        edk2-ef91b07388e1c0a50c604e5350eeda98428ccea6.tar.gz
+Source1:        openssl-52c587d60be67c337364b830dd3fdc15404a2f04.tar.gz
+Source2:        brotly-tool-666c3280cc11dc433c303d79a83d4ffbdd12cc8d.tar.gz
+Source3:        brotly-library-666c3280cc11dc433c303d79a83d4ffbdd12cc8d.tar.gz
 
 BuildRequires:  nasm >= 2.10
 BuildRequires:  gcc
 BuildRequires:  libuuid-devel
 BuildRequires:  /usr/bin/iasl
+%if 0%{?centos_ver} >= 8
+BuildRequires:  python2-devel
+%endif
 
 ExclusiveArch: x86_64
+
+%if 0%{?centos_ver} >= 8
+# Disable debug package, generation of debugsourcefiles.list fails
+%define debug_package %{nil}
+%endif
 
 %description
 OVMF (Open Virtual Machine Firmware) is a project to enable UEFI support for
@@ -29,9 +39,14 @@ Virtual Machines. This package contains a 64-bit UEFI firmware for Xen.
 %prep
 %setup -q -n edk2
 %{__tar} -C ${RPM_BUILD_DIR} -zxf %{SOURCE1}
+%{__tar} -C ${RPM_BUILD_DIR} -zxf %{SOURCE2}
+%{__tar} -C ${RPM_BUILD_DIR} -zxf %{SOURCE3}
 
 
 %build
+%if 0%{?centos_ver} >= 8
+export PYTHON_COMMAND=%{__python2}
+%endif
 # make %{?_smp_mflags}, how to use that with ovmf?
 smp_flags="%{?_smp_mflags}"
 if [[ "$smp_flags" = -j* ]]; then
@@ -64,6 +79,9 @@ install -D -m 644 Build/OvmfX64/RELEASE_GCC*/FV/OVMF.fd %{buildroot}/%{_libexecd
 
 
 %changelog
+* Mon May 24 2021 Anthony PERARD <anthony.perard@citrix.com> - 202102-1.gitef91b07388e1
+- Bump to newer version, in order to built it on CentOS 8
+
 * Tue May 26 2020 Anthony PERARD <anthony.perard@citrix.com> - 201905-1.git20d2e5a12
 - Bump with OVMF from Xen 4.13
 
